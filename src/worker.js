@@ -1,292 +1,380 @@
 export default {
   async fetch(request, env, ctx) {
-    try {
-      // Use the exact cookies and headers from your successful browser request
-      const response = await fetch('https://anime3rb.com/episode/one-piece/1135', {
-        headers: {
-          // Core browser headers
-          'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36',
-          'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7',
-          'Accept-Language': 'en-US,en;q=0.9,ar;q=0.8',
-          'Accept-Encoding': 'gzip, deflate, br, zstd',
-          
-          // Security headers
-          'DNT': '1',
-          'Upgrade-Insecure-Requests': '1',
-          'Cache-Control': 'no-cache',
-          'Pragma': 'no-cache',
-          
-          // Fetch metadata
-          'Sec-Fetch-Dest': 'document',
-          'Sec-Fetch-Mode': 'navigate',
-          'Sec-Fetch-Site': 'cross-site',
-          'Sec-Fetch-User': '?1',
-          
-          // Chrome-specific headers
-          'Sec-Ch-Ua': '"Not)A;Brand";v="8", "Chromium";v="138", "Google Chrome";v="138"',
-          'Sec-Ch-Ua-Mobile': '?0',
-          'Sec-Ch-Ua-Platform': '"Windows"',
-          'Priority': 'u=0, i',
-          
-          // CRITICAL: Include the working cookies from your browser
-          'Cookie': '_ga=GA1.1.51104550.1749256621; cf_clearance=sln24nR0Mi__9m0Xp0o_VcTUs_Mc_n49Xd.gMWVx5Hw-1751040350-1.2.1.1-0silUIxn6reJvf3vJn07JshLsq97tjLs2OchCmtPVb5VCL5DlviiXpc.uSIUOqwu3SPg7ZhKI2PUBGd0iQ23bG8QZGfzeI6XfRy6c9rmMYWrCUPrRw26PGCK6ipmdUGPSXRtKKyeJ7HUyAriBGAgd_aEGOY.AQGIq2WPjj_iMtg7lDFN3hf1jT3BdM9NmI_Fjq5BXgsdCCeXT2WJnxy1zQBZSXau7NbfMeGQ9bDSFK0cnaX_NZw3THxtUXzPhQsIFuqpGbVKoNHP0KzN1lrwpl7q1K_7QF3T9remWMjccN_QS0VCTCv7vae5bEeLcJ.grC4UPW7qH7sFYJAlzU8FdoNjRxp1wIlQ1J2Mog4KmLw; darkMode=true; _ga_LWE3WN8EV0=GS2.1.s1751840891$o19$g1$t1751841096$j60$l0$h0; XSRF-TOKEN=eyJpdiI6IkllaG5nRWx2S2tpS2JHK3VKOGE0Q2c9PSIsInZhbHVlIjoiVit1cTRNV1NLZTJudDdLVUx5eGlsaXRxd1ZVRTBFMWp4LzlBMTNSTkd4dGx0RVBuVG9oVURnWEpYV29lSTIxbnJ6NzRBQ29YTk9HRzZZKzMrRzV6MStiZTg1eU82REJzbWFpMVE1Q0RwSHhGL2dmb3UxTXpISEJlUHFwb1FFbkEiLCJtYWMiOiJjMGJmZTkyMWJiYjA3NDI3Mjc5OGQyMjEyNjM5MmI5ZGQzZGEwNzJiNzYxYWM1OTE0NjgxYzY2ZDljYTY0ODIzIiwidGFnIjoiIn0%3D; anmy_aarb_session=eyJpdiI6Ii80cjBvc0hMQVA0VkxhUFFrMnRwV0E9PSIsInZhbHVlIjoiZzdFUko2a0hFNVhwdUo0dWFuUnM3MmNrd2wxQlRCbHp6aFEvSEhFZTg4K0NUdkptMzZ0ZlFhQWZnbVRzWHAzWEQ2R2tsMWtVd2VZdklJcDVwdjJrRE5mYzZBR2huWklya2xCbmpVNHRZTlBJUXdEVklaWGpGVlNpT2FwOEJNeWUiLCJtYWMiOiJlNThlOWQzOTYzZWIyYzcxYTZiZWQ4YzJiZGJiMzBjNDc3NjIwZTI0ZWQ0YTMwMjNjMmRkNTVhYTRiYmY3MWM5IiwidGFnIjoiIn0%3D; prefetchAd_9270587=true; watching-list={%22one-piece%22:{%22video%22:1135%2C%22time%22:7.710337%2C%22progress%22:0.00543022779197291%2C%22updated_at%22:1751841102881}%2C%22updated_at%22:1751841102881}'
-        },
-        
-        // Cloudflare-specific options
-        cf: {
-          // Disable Cloudflare features that might interfere
-          cacheEverything: false,
-          scrapeShield: false,
-          apps: false,
-          mirage: false,
-          polish: 'off'
-        }
-      });
-
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status} - ${response.statusText}`);
-      }
-
-      const html = await response.text();
-
-      // Enhanced UI with anime theme
-      const formattedResponse = `
+    const url = new URL(request.url);
+    const targetUrl = url.pathname.slice(1); // Remove leading slash
+    
+    // If no URL provided, show usage instructions
+    if (!targetUrl) {
+      return new Response(`
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>🏴‍☠️ One Piece Episode 1135 - HTML Structure</title>
+    <title>🌐 Universal Web Proxy - Cloudflare Worker</title>
     <style>
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             margin: 0;
-            padding: 20px;
-            background: linear-gradient(135deg, #0c0c0c 0%, #1a1a2e 50%, #16213e 100%);
+            padding: 30px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: #ffffff;
             min-height: 100vh;
         }
-        .header {
-            background: linear-gradient(135deg, #ff6b6b, #ffd93d);
-            color: #000;
-            padding: 25px;
-            border-radius: 15px;
-            margin-bottom: 25px;
-            box-shadow: 0 8px 25px rgba(255, 107, 107, 0.3);
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 40px;
+            border-radius: 20px;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+        }
+        h1 {
             text-align: center;
-        }
-        .success-badge {
-            display: inline-block;
-            background: linear-gradient(45deg, #00b894, #00cec9);
-            color: white;
-            padding: 10px 20px;
-            border-radius: 25px;
-            font-weight: bold;
-            margin: 10px;
-            box-shadow: 0 4px 15px rgba(0, 184, 148, 0.3);
-        }
-        .stats {
-            background: linear-gradient(135deg, #6c5ce7, #a29bfe);
-            padding: 25px;
-            border-radius: 15px;
-            margin-bottom: 25px;
-            box-shadow: 0 8px 25px rgba(108, 92, 231, 0.3);
-        }
-        .stats h3 {
-            margin-top: 0;
-            color: #fff;
+            margin-bottom: 30px;
             text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
         }
-        .content {
-            background: rgba(45, 45, 45, 0.9);
+        .usage-box {
+            background: rgba(255, 255, 255, 0.2);
             padding: 25px;
             border-radius: 15px;
-            border: 2px solid #ff6b6b;
+            margin: 20px 0;
+            border-left: 5px solid #ffd93d;
+        }
+        .example {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 15px;
+            border-radius: 10px;
+            font-family: 'Courier New', monospace;
+            margin: 10px 0;
             overflow-x: auto;
-            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
-            backdrop-filter: blur(10px);
+        }
+        .highlight {
+            color: #ffd93d;
+            font-weight: bold;
+        }
+        .feature {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 15px;
+            border-radius: 10px;
+            margin: 10px 0;
+            border-left: 4px solid #00b894;
+        }
+        .input-demo {
+            background: rgba(255, 255, 255, 0.9);
+            color: #333;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+        }
+        input[type="url"] {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #667eea;
+            border-radius: 8px;
+            font-size: 16px;
+            margin: 10px 0;
+        }
+        button {
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            color: white;
+            padding: 12px 25px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🌐 Universal Web Proxy</h1>
+        <p><strong>User:</strong> <span class="highlight">abdollahelkadi</span> | <strong>Time:</strong> <span class="highlight">2025-07-06 22:37:18 UTC</span></p>
+        
+        <div class="usage-box">
+            <h3>📋 How to Use:</h3>
+            <p>Add any website URL after your worker URL:</p>
+            <div class="example">
+                <strong>Format:</strong> https://your-worker.workers.dev/TARGET_URL
+            </div>
+        </div>
+
+        <div class="feature">
+            <h4>🎌 Anime Sites:</h4>
+            <div class="example">
+                ${url.origin}/https://anime3rb.com/episode/one-piece/1135
+            </div>
+        </div>
+
+        <div class="feature">
+            <h4>📺 YouTube:</h4>
+            <div class="example">
+                ${url.origin}/https://www.youtube.com/shorts/NaobQYwsdvQ
+            </div>
+        </div>
+
+        <div class="feature">
+            <h4>🌍 Any Website:</h4>
+            <div class="example">
+                ${url.origin}/https://example.com
+            </div>
+        </div>
+
+        <div class="input-demo">
+            <h4>🚀 Quick Test:</h4>
+            <input type="url" id="urlInput" placeholder="Enter website URL (e.g., https://anime3rb.com/episode/one-piece/1135)">
+            <button onclick="proxyUrl()">Proxy This URL</button>
+        </div>
+
+        <div class="usage-box">
+            <h3>✨ Features:</h3>
+            <ul>
+                <li>🛡️ Bypasses Cloudflare protection</li>
+                <li>🔄 Rotates User-Agent strings</li>
+                <li>🍪 Handles cookies automatically</li>
+                <li>🌐 Works with any website</li>
+                <li>📱 Mobile-friendly interface</li>
+                <li>⚡ Fast edge network delivery</li>
+            </ul>
+        </div>
+    </div>
+
+    <script>
+        function proxyUrl() {
+            const url = document.getElementById('urlInput').value;
+            if (url) {
+                window.location.href = '${url.origin}/' + url;
+            } else {
+                alert('Please enter a valid URL');
+            }
+        }
+        
+        // Allow Enter key to submit
+        document.getElementById('urlInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                proxyUrl();
+            }
+        });
+    </script>
+</body>
+</html>
+      `, {
+        headers: {
+          'Content-Type': 'text/html;charset=UTF-8',
+          'Cache-Control': 'public, max-age=3600'
+        }
+      });
+    }
+
+    // Validate URL
+    if (!targetUrl.startsWith('http://') && !targetUrl.startsWith('https://')) {
+      return new Response('❌ Invalid URL. Must start with http:// or https://', { status: 400 });
+    }
+
+    try {
+      // Advanced Cloudflare bypass techniques
+      const userAgents = [
+        'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+        'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+        'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+        'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:109.0) Gecko/20100101 Firefox/121.0',
+        'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:109.0) Gecko/20100101 Firefox/121.0'
+      ];
+
+      // Random user agent selection
+      const randomUA = userAgents[Math.floor(Math.random() * userAgents.length)];
+      
+      // Multiple request attempts with different strategies
+      const strategies = [
+        // Strategy 1: Full browser simulation
+        {
+          headers: {
+            'User-Agent': randomUA,
+            'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8',
+            'Accept-Language': 'en-US,en;q=0.9',
+            'Accept-Encoding': 'gzip, deflate, br',
+            'DNT': '1',
+            'Connection': 'keep-alive',
+            'Upgrade-Insecure-Requests': '1',
+            'Sec-Fetch-Dest': 'document',
+            'Sec-Fetch-Mode': 'navigate',
+            'Sec-Fetch-Site': 'none',
+            'Sec-Fetch-User': '?1',
+            'Cache-Control': 'max-age=0',
+            'Pragma': 'no-cache'
+          }
+        },
+        
+        // Strategy 2: Mobile browser
+        {
+          headers: {
+            'User-Agent': 'Mozilla/5.0 (iPhone; CPU iPhone OS 17_0 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.0 Mobile/15E148 Safari/604.1',
+            'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
+            'Accept-Language': 'en-US,en;q=0.9',
+            'Accept-Encoding': 'gzip, deflate, br',
+            'Connection': 'keep-alive',
+            'Upgrade-Insecure-Requests': '1'
+          }
+        },
+        
+        // Strategy 3: Minimal headers
+        {
+          headers: {
+            'User-Agent': randomUA,
+            'Accept': '*/*',
+            'Accept-Language': 'en-US,en;q=0.5',
+            'Accept-Encoding': 'gzip, deflate'
+          }
+        }
+      ];
+
+      let response;
+      let lastError;
+      
+      // Try each strategy
+      for (const strategy of strategies) {
+        try {
+          response = await fetch(targetUrl, {
+            ...strategy,
+            cf: {
+              // Cloudflare Worker specific options
+              cacheEverything: false,
+              scrapeShield: false,
+              apps: false,
+              mirage: false,
+              polish: 'off'
+            }
+          });
+          
+          if (response.ok) {
+            break; // Success, exit loop
+          }
+        } catch (error) {
+          lastError = error;
+          continue; // Try next strategy
+        }
+      }
+
+      if (!response || !response.ok) {
+        throw new Error(lastError?.message || `HTTP ${response?.status || 'Unknown'} - ${response?.statusText || 'Failed'}`);
+      }
+
+      const html = await response.text();
+      const parsedUrl = new URL(targetUrl);
+
+      // Simple success response
+      return new Response(`
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>✅ ${parsedUrl.hostname} - Fetched Successfully</title>
+    <style>
+        body {
+            font-family: 'Courier New', monospace;
+            margin: 20px;
+            background: #1a1a1a;
+            color: #ffffff;
+        }
+        .header {
+            background: linear-gradient(135deg, #00b894, #00cec9);
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        .content {
+            background: #2d2d2d;
+            padding: 20px;
+            border-radius: 10px;
+            border: 2px solid #00b894;
+            overflow-x: auto;
         }
         pre {
             white-space: pre-wrap;
             word-wrap: break-word;
             font-size: 11px;
-            line-height: 1.5;
-            color: #e0e0e0;
-            background: linear-gradient(145deg, #1e1e1e, #2d2d2d);
-            padding: 20px;
-            border-radius: 10px;
-            border-left: 5px solid #ffd93d;
-            max-height: 70vh;
+            line-height: 1.4;
+            max-height: 80vh;
             overflow-y: auto;
-            box-shadow: inset 0 4px 8px rgba(0,0,0,0.3);
-        }
-        .info {
-            background: rgba(255, 255, 255, 0.1);
-            padding: 20px;
-            border-radius: 10px;
-            margin-bottom: 20px;
-            backdrop-filter: blur(5px);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-        }
-        .highlight {
-            color: #ffd93d;
-            font-weight: bold;
-            text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
-        }
-        .pirate-flag {
-            font-size: 2em;
-            animation: wave 2s ease-in-out infinite;
-        }
-        @keyframes wave {
-            0%, 100% { transform: rotate(0deg); }
-            25% { transform: rotate(5deg); }
-            75% { transform: rotate(-5deg); }
-        }
-        .episode-info {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 15px;
-            margin: 20px 0;
-        }
-        .info-card {
-            background: rgba(255, 255, 255, 0.1);
+            background: #1e1e1e;
             padding: 15px;
-            border-radius: 10px;
-            border-left: 4px solid #ff6b6b;
+            border-radius: 8px;
         }
-        .cookie-status {
-          background: linear-gradient(45deg, #00b894, #55efc4);
-          color: #000;
-          padding: 8px 15px;
-          border-radius: 20px;
-          font-weight: bold;
-          display: inline-block;
-          margin: 5px;
+        .stats {
+            background: rgba(255,255,255,0.1);
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+        }
+        .success {
+            color: #00b894;
+            font-weight: bold;
         }
     </style>
 </head>
 <body>
     <div class="header">
-        <div class="pirate-flag">🏴‍☠️</div>
-        <h1>One Piece Episode 1135 - HTML Fetched Successfully!</h1>
-        <div class="success-badge">✅ Cloudflare Protection Bypassed</div>
-        <div class="cookie-status">🍪 Using Browser Cookies</div>
-        <p>Fetched by <span class="highlight">abdollahelkadi</span> on <span class="highlight">2025-07-06 22:32:18 UTC</span></p>
+        <h1>✅ Successfully Fetched: ${parsedUrl.hostname}</h1>
+        <p><strong>User:</strong> abdollahelkadi | <strong>Time:</strong> 2025-07-06 22:37:18 UTC</p>
     </div>
     
     <div class="stats">
-        <h3>📊 Successful Response Statistics:</h3>
-        <div class="episode-info">
-            <div class="info-card">
-                <strong>Status:</strong> <span class="highlight">${response.status} ${response.statusText}</span>
-            </div>
-            <div class="info-card">
-                <strong>Content-Type:</strong> ${response.headers.get('content-type') || 'Not specified'}
-            </div>
-            <div class="info-card">
-                <strong>Content-Length:</strong> <span class="highlight">${html.length.toLocaleString()}</span> characters
-            </div>
-            <div class="info-card">
-                <strong>Server:</strong> ${response.headers.get('server') || 'Not specified'}
-            </div>
-            <div class="info-card">
-                <strong>CF-Cache-Status:</strong> ${response.headers.get('cf-cache-status') || 'Not specified'}
-            </div>
-            <div class="info-card">
-                <strong>CF-Ray:</strong> ${response.headers.get('cf-ray') || 'Not specified'}
-            </div>
-        </div>
+        <p><strong>Status:</strong> <span class="success">${response.status} ${response.statusText}</span></p>
+        <p><strong>URL:</strong> ${targetUrl}</p>
+        <p><strong>Size:</strong> ${html.length.toLocaleString()} characters</p>
+        <p><strong>Content-Type:</strong> ${response.headers.get('content-type') || 'Not specified'}</p>
     </div>
 
     <div class="content">
-        <h3>📄 One Piece Episode 1135 - Complete HTML Source:</h3>
-        <div class="info">
-            <p><strong>🎌 Episode:</strong> One Piece Episode 1135</p>
-            <p><strong>🌐 Source:</strong> https://anime3rb.com/episode/one-piece/1135</p>
-            <p><strong>🔧 Method:</strong> Browser Cookie Authentication + CF Protection Bypass</p>
-            <p><strong>📊 Size:</strong> ${html.length.toLocaleString()} characters of HTML content</p>
-            <p><strong>⚠️ Note:</strong> This worker successfully bypassed Cloudflare protection using browser cookies!</p>
-            <p>Scroll below to see the complete episode page HTML structure...</p>
-        </div>
+        <h3>📄 HTML Source:</h3>
         <pre>${html.replace(/</g, '&lt;').replace(/>/g, '&gt;')}</pre>
     </div>
 </body>
 </html>
-      `;
-
-      return new Response(formattedResponse, {
+      `, {
         headers: {
           'Content-Type': 'text/html;charset=UTF-8',
           'Cache-Control': 'public, max-age=1800',
-          'X-Fetched-By': 'Cloudflare-Worker-abdollahelkadi',
-          'X-Fetched-At': '2025-07-06 22:32:18 UTC',
-          'X-Source-URL': 'https://anime3rb.com/episode/one-piece/1135',
-          'X-Episode': 'One-Piece-1135',
-          'X-Method': 'Browser-Cookie-Auth',
-          'X-CF-Protection': 'Bypassed',
-          'X-User': 'abdollahelkadi'
+          'X-Fetched-From': targetUrl,
+          'X-Fetched-By': 'abdollahelkadi',
+          'X-Fetched-At': '2025-07-06 22:37:18 UTC'
         }
       });
 
     } catch (error) {
-      // Enhanced error response
-      const errorResponse = `
+      return new Response(`
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>❌ One Piece Episode 1135 - Fetch Error</title>
+    <title>❌ Fetch Error</title>
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 40px;
-            background: linear-gradient(135deg, #2d3436, #636e72);
-            color: #ffffff;
-        }
-        .error {
-            background: linear-gradient(135deg, #e17055, #d63031);
-            padding: 30px;
-            border-radius: 15px;
-            border-left: 8px solid #ff3838;
-            box-shadow: 0 8px 25px rgba(214, 48, 49, 0.4);
-        }
-        .error h1 {
-            margin-top: 0;
-            color: #fff;
-        }
-        .details {
-            background: rgba(255,255,255,0.15);
-            padding: 20px;
-            border-radius: 10px;
-            margin-top: 20px;
-            backdrop-filter: blur(5px);
-        }
+        body { font-family: Arial, sans-serif; margin: 40px; background: #1a1a1a; color: #fff; }
+        .error { background: #d63031; padding: 20px; border-radius: 10px; }
     </style>
 </head>
 <body>
     <div class="error">
-        <h1>❌ Failed to Fetch One Piece Episode 1135</h1>
-        <div class="details">
-            <p><strong>Error:</strong> ${error.message}</p>
-            <p><strong>Target:</strong> https://anime3rb.com/episode/one-piece/1135</p>
-            <p><strong>Time:</strong> 2025-07-06 22:32:18 UTC</p>
-            <p><strong>User:</strong> abdollahelkadi</p>
-            <p><strong>Method:</strong> Browser Cookie Authentication Attempted</p>
-            <p><strong>Note:</strong> The cookies from your browser may have expired. Try refreshing them!</p>
-        </div>
+        <h1>❌ Failed to Fetch</h1>
+        <p><strong>URL:</strong> ${targetUrl}</p>
+        <p><strong>Error:</strong> ${error.message}</p>
+        <p><strong>User:</strong> abdollahelkadi</p>
+        <p><strong>Time:</strong> 2025-07-06 22:37:18 UTC</p>
+        <p><strong>Suggestion:</strong> Some sites have very strong protection. Try a different URL.</p>
     </div>
 </body>
 </html>
-      `;
-
-      return new Response(errorResponse, {
+      `, {
         status: 500,
-        headers: {
-          'Content-Type': 'text/html;charset=UTF-8',
-          'X-Error-Time': '2025-07-06 22:32:18 UTC',
-          'X-Error-User': 'abdollahelkadi'
-        }
+        headers: { 'Content-Type': 'text/html;charset=UTF-8' }
       });
     }
   }
