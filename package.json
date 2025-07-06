@@ -4,17 +4,22 @@
   "description": "Cloudflare Worker to fetch Wikipedia HTML structure",
   "main": "src/worker.js",
   "scripts": {
-    "dev": "wrangler dev",
+    "build": "wrangler build",
     "deploy": "wrangler deploy",
-    "deploy:staging": "wrangler deploy --env staging",
-    "deploy:production": "wrangler deploy --env production",
+    "dev": "wrangler dev",
+    "start": "wrangler dev",
+    "preview": "wrangler dev --local",
     "tail": "wrangler tail",
-    "types": "wrangler types"
+    "types": "wrangler types",
+    "cf-typegen": "wrangler types"
   },
   "devDependencies": {
-    "@cloudflare/workers-types": "^4.20240620.0",
-    "wrangler": "^3.60.3"
+    "@cloudflare/workers-types": "^4.20250705.0",
+    "wrangler": "^3.114.10"
   },
   "author": "abdollahelkadi",
-  "license": "MIT"
+  "license": "MIT",
+  "engines": {
+    "node": ">=18.0.0"
+  }
 }
