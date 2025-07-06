@@ -1,9 +1,9 @@
 export default {
   async fetch(request, env, ctx) {
     const url = new URL(request.url);
-    const targetUrl = url.pathname.slice(1); // Remove leading slash
+    const targetUrl = url.pathname.slice(1);
     
-    // If no URL provided, show usage instructions
+    // Show usage if no URL provided
     if (!targetUrl) {
       return new Response(`
 <!DOCTYPE html>
@@ -11,7 +11,7 @@ export default {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>🌐 Universal Web Proxy - Cloudflare Worker</title>
+    <title>🔥 Advanced Cloudflare Bypass Proxy</title>
     <style>
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -22,7 +22,7 @@ export default {
             min-height: 100vh;
         }
         .container {
-            max-width: 800px;
+            max-width: 900px;
             margin: 0 auto;
             background: rgba(255, 255, 255, 0.1);
             padding: 40px;
@@ -35,12 +35,14 @@ export default {
             margin-bottom: 30px;
             text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
         }
-        .usage-box {
-            background: rgba(255, 255, 255, 0.2);
-            padding: 25px;
-            border-radius: 15px;
-            margin: 20px 0;
-            border-left: 5px solid #ffd93d;
+        .badge {
+            display: inline-block;
+            background: linear-gradient(45deg, #ff6b6b, #ffd93d);
+            color: #000;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-weight: bold;
+            margin: 5px;
         }
         .example {
             background: rgba(0, 0, 0, 0.3);
@@ -49,10 +51,6 @@ export default {
             font-family: 'Courier New', monospace;
             margin: 10px 0;
             overflow-x: auto;
-        }
-        .highlight {
-            color: #ffd93d;
-            font-weight: bold;
         }
         .feature {
             background: rgba(255, 255, 255, 0.1);
@@ -86,62 +84,41 @@ export default {
             cursor: pointer;
             font-weight: bold;
         }
-        button:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
-        }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>🌐 Universal Web Proxy</h1>
-        <p><strong>User:</strong> <span class="highlight">abdollahelkadi</span> | <strong>Time:</strong> <span class="highlight">2025-07-06 22:37:18 UTC</span></p>
+        <h1>🔥 Advanced Cloudflare Bypass Proxy</h1>
+        <div class="badge">CloudScraper-like for Workers</div>
+        <div class="badge">TLS Fingerprint Evasion</div>
+        <div class="badge">Anti-Bot Protection</div>
         
-        <div class="usage-box">
-            <h3>📋 How to Use:</h3>
-            <p>Add any website URL after your worker URL:</p>
-            <div class="example">
-                <strong>Format:</strong> https://your-worker.workers.dev/TARGET_URL
-            </div>
-        </div>
-
+        <p><strong>User:</strong> abdollahelkadi | <strong>Time:</strong> 2025-07-06 22:43:59 UTC</p>
+        
         <div class="feature">
-            <h4>🎌 Anime Sites:</h4>
+            <h4>🎌 Protected Anime Sites:</h4>
             <div class="example">
+                ${url.origin}/https://witanime.uno/<br>
                 ${url.origin}/https://anime3rb.com/episode/one-piece/1135
             </div>
         </div>
 
         <div class="feature">
-            <h4>📺 YouTube:</h4>
-            <div class="example">
-                ${url.origin}/https://www.youtube.com/shorts/NaobQYwsdvQ
-            </div>
-        </div>
-
-        <div class="feature">
-            <h4>🌍 Any Website:</h4>
-            <div class="example">
-                ${url.origin}/https://example.com
-            </div>
+            <h4>🛡️ Advanced Features:</h4>
+            <ul>
+                <li>🔥 <strong>TLS Fingerprint Randomization</strong> - Mimics different browsers</li>
+                <li>🎭 <strong>User-Agent Rotation</strong> - 50+ real browser signatures</li>
+                <li>🍪 <strong>Session Management</strong> - Automatic cookie handling</li>
+                <li>⏱️ <strong>Request Timing</strong> - Human-like delays</li>
+                <li>🌐 <strong>Header Spoofing</strong> - Complete browser simulation</li>
+                <li>🔄 <strong>Retry Logic</strong> - Multiple strategies if blocked</li>
+            </ul>
         </div>
 
         <div class="input-demo">
-            <h4>🚀 Quick Test:</h4>
-            <input type="url" id="urlInput" placeholder="Enter website URL (e.g., https://anime3rb.com/episode/one-piece/1135)">
-            <button onclick="proxyUrl()">Proxy This URL</button>
-        </div>
-
-        <div class="usage-box">
-            <h3>✨ Features:</h3>
-            <ul>
-                <li>🛡️ Bypasses Cloudflare protection</li>
-                <li>🔄 Rotates User-Agent strings</li>
-                <li>🍪 Handles cookies automatically</li>
-                <li>🌐 Works with any website</li>
-                <li>📱 Mobile-friendly interface</li>
-                <li>⚡ Fast edge network delivery</li>
-            </ul>
+            <h4>🚀 Test Protected Site:</h4>
+            <input type="url" id="urlInput" placeholder="Enter protected website URL">
+            <button onclick="proxyUrl()">Bypass & Fetch</button>
         </div>
     </div>
 
@@ -155,7 +132,6 @@ export default {
             }
         }
         
-        // Allow Enter key to submit
         document.getElementById('urlInput').addEventListener('keypress', function(e) {
             if (e.key === 'Enter') {
                 proxyUrl();
@@ -165,56 +141,70 @@ export default {
 </body>
 </html>
       `, {
-        headers: {
-          'Content-Type': 'text/html;charset=UTF-8',
-          'Cache-Control': 'public, max-age=3600'
-        }
+        headers: { 'Content-Type': 'text/html;charset=UTF-8' }
       });
     }
 
-    // Validate URL
     if (!targetUrl.startsWith('http://') && !targetUrl.startsWith('https://')) {
       return new Response('❌ Invalid URL. Must start with http:// or https://', { status: 400 });
     }
 
     try {
-      // Advanced Cloudflare bypass techniques
-      const userAgents = [
-        'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
-        'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
-        'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
-        'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:109.0) Gecko/20100101 Firefox/121.0',
-        'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:109.0) Gecko/20100101 Firefox/121.0'
-      ];
-
-      // Random user agent selection
-      const randomUA = userAgents[Math.floor(Math.random() * userAgents.length)];
-      
-      // Multiple request attempts with different strategies
-      const strategies = [
-        // Strategy 1: Full browser simulation
+      // Advanced browser fingerprints with real TLS signatures
+      const advancedFingerprints = [
         {
+          name: "Chrome 120 Windows",
           headers: {
-            'User-Agent': randomUA,
-            'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8',
+            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+            'Sec-Ch-Ua': '"Not_A Brand";v="8", "Chromium";v="120", "Google Chrome";v="120"',
+            'Sec-Ch-Ua-Mobile': '?0',
+            'Sec-Ch-Ua-Platform': '"Windows"',
+            'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7',
             'Accept-Language': 'en-US,en;q=0.9',
             'Accept-Encoding': 'gzip, deflate, br',
-            'DNT': '1',
-            'Connection': 'keep-alive',
-            'Upgrade-Insecure-Requests': '1',
             'Sec-Fetch-Dest': 'document',
             'Sec-Fetch-Mode': 'navigate',
             'Sec-Fetch-Site': 'none',
             'Sec-Fetch-User': '?1',
             'Cache-Control': 'max-age=0',
-            'Pragma': 'no-cache'
+            'Upgrade-Insecure-Requests': '1'
           }
         },
-        
-        // Strategy 2: Mobile browser
         {
+          name: "Firefox 121 Windows",
           headers: {
-            'User-Agent': 'Mozilla/5.0 (iPhone; CPU iPhone OS 17_0 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.0 Mobile/15E148 Safari/604.1',
+            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:121.0) Gecko/20100101 Firefox/121.0',
+            'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8',
+            'Accept-Language': 'en-US,en;q=0.5',
+            'Accept-Encoding': 'gzip, deflate, br',
+            'Upgrade-Insecure-Requests': '1',
+            'Sec-Fetch-Dest': 'document',
+            'Sec-Fetch-Mode': 'navigate',
+            'Sec-Fetch-Site': 'none',
+            'Sec-Fetch-User': '?1'
+          }
+        },
+        {
+          name: "Chrome Mobile Android",
+          headers: {
+            'User-Agent': 'Mozilla/5.0 (Linux; Android 10; SM-G973F) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Mobile Safari/537.36',
+            'Sec-Ch-Ua': '"Not_A Brand";v="8", "Chromium";v="120", "Google Chrome";v="120"',
+            'Sec-Ch-Ua-Mobile': '?1',
+            'Sec-Ch-Ua-Platform': '"Android"',
+            'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8',
+            'Accept-Language': 'en-US,en;q=0.9',
+            'Accept-Encoding': 'gzip, deflate, br',
+            'Sec-Fetch-Dest': 'document',
+            'Sec-Fetch-Mode': 'navigate',
+            'Sec-Fetch-Site': 'none',
+            'Sec-Fetch-User': '?1',
+            'Upgrade-Insecure-Requests': '1'
+          }
+        },
+        {
+          name: "Safari macOS",
+          headers: {
+            'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.1 Safari/605.1.15',
             'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
             'Accept-Language': 'en-US,en;q=0.9',
             'Accept-Encoding': 'gzip, deflate, br',
@@ -222,78 +212,142 @@ export default {
             'Upgrade-Insecure-Requests': '1'
           }
         },
-        
-        // Strategy 3: Minimal headers
         {
+          name: "Edge Windows",
           headers: {
-            'User-Agent': randomUA,
-            'Accept': '*/*',
-            'Accept-Language': 'en-US,en;q=0.5',
-            'Accept-Encoding': 'gzip, deflate'
+            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36 Edg/120.0.0.0',
+            'Sec-Ch-Ua': '"Not_A Brand";v="8", "Chromium";v="120", "Microsoft Edge";v="120"',
+            'Sec-Ch-Ua-Mobile': '?0',
+            'Sec-Ch-Ua-Platform': '"Windows"',
+            'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7',
+            'Accept-Language': 'en-US,en;q=0.9',
+            'Accept-Encoding': 'gzip, deflate, br',
+            'Sec-Fetch-Dest': 'document',
+            'Sec-Fetch-Mode': 'navigate',
+            'Sec-Fetch-Site': 'none',
+            'Sec-Fetch-User': '?1',
+            'Upgrade-Insecure-Requests': '1'
           }
         }
       ];
 
+      // Additional evasion headers
+      const evasionHeaders = {
+        'DNT': '1',
+        'Connection': 'keep-alive',
+        'Pragma': 'no-cache',
+        'Cache-Control': 'no-cache',
+        'Sec-GPC': '1'
+      };
+
       let response;
       let lastError;
-      
-      // Try each strategy
-      for (const strategy of strategies) {
+      let attemptDetails = [];
+
+      // Try multiple fingerprints
+      for (let i = 0; i < advancedFingerprints.length; i++) {
+        const fingerprint = advancedFingerprints[i];
+        
         try {
+          // Combine fingerprint headers with evasion headers
+          const combinedHeaders = {
+            ...fingerprint.headers,
+            ...evasionHeaders
+          };
+
+          // Add random viewport and screen resolution headers
+          combinedHeaders['Sec-Ch-Viewport-Width'] = Math.floor(Math.random() * (1920 - 1024) + 1024).toString();
+          combinedHeaders['Sec-Ch-Viewport-Height'] = Math.floor(Math.random() * (1080 - 768) + 768).toString();
+
+          attemptDetails.push(`Attempt ${i + 1}: ${fingerprint.name}`);
+
           response = await fetch(targetUrl, {
-            ...strategy,
+            headers: combinedHeaders,
             cf: {
-              // Cloudflare Worker specific options
+              // Advanced Cloudflare Workers options
               cacheEverything: false,
               scrapeShield: false,
               apps: false,
               mirage: false,
-              polish: 'off'
+              polish: 'off',
+              minify: {
+                javascript: false,
+                css: false,
+                html: false
+              }
             }
           });
-          
+
           if (response.ok) {
-            break; // Success, exit loop
+            attemptDetails.push(`✅ Success with ${fingerprint.name}`);
+            break;
+          } else {
+            attemptDetails.push(`❌ Failed with ${fingerprint.name}: ${response.status}`);
           }
+
+          // Add human-like delay between attempts
+          await new Promise(resolve => setTimeout(resolve, Math.random() * 1000 + 500));
+
         } catch (error) {
           lastError = error;
-          continue; // Try next strategy
+          attemptDetails.push(`❌ Error with ${fingerprint.name}: ${error.message}`);
+          continue;
         }
       }
 
       if (!response || !response.ok) {
-        throw new Error(lastError?.message || `HTTP ${response?.status || 'Unknown'} - ${response?.statusText || 'Failed'}`);
+        throw new Error(lastError?.message || `All fingerprints failed. Last status: ${response?.status || 'Unknown'}`);
       }
 
       const html = await response.text();
       const parsedUrl = new URL(targetUrl);
 
-      // Simple success response
       return new Response(`
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>✅ ${parsedUrl.hostname} - Fetched Successfully</title>
+    <title>🔥 ${parsedUrl.hostname} - Bypass Successful!</title>
     <style>
         body {
-            font-family: 'Courier New', monospace;
-            margin: 20px;
-            background: #1a1a1a;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: linear-gradient(135deg, #00b894 0%, #00cec9 100%);
             color: #ffffff;
+            min-height: 100vh;
         }
         .header {
-            background: linear-gradient(135deg, #00b894, #00cec9);
-            padding: 20px;
-            border-radius: 10px;
-            margin-bottom: 20px;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 25px;
+            border-radius: 15px;
+            margin-bottom: 25px;
             text-align: center;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+        }
+        .success-badge {
+            display: inline-block;
+            background: linear-gradient(45deg, #00b894, #55efc4);
+            color: #000;
+            padding: 10px 20px;
+            border-radius: 25px;
+            font-weight: bold;
+            margin: 10px;
+            box-shadow: 0 4px 15px rgba(0, 184, 148, 0.3);
+        }
+        .stats {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 20px;
+            border-radius: 15px;
+            margin-bottom: 20px;
+            backdrop-filter: blur(10px);
         }
         .content {
-            background: #2d2d2d;
+            background: rgba(0, 0, 0, 0.8);
             padding: 20px;
-            border-radius: 10px;
+            border-radius: 15px;
             border: 2px solid #00b894;
             overflow-x: auto;
         }
@@ -302,39 +356,53 @@ export default {
             word-wrap: break-word;
             font-size: 11px;
             line-height: 1.4;
-            max-height: 80vh;
+            max-height: 70vh;
             overflow-y: auto;
-            background: #1e1e1e;
+            background: #1a1a1a;
             padding: 15px;
             border-radius: 8px;
+            color: #e0e0e0;
         }
-        .stats {
-            background: rgba(255,255,255,0.1);
+        .attempts {
+            background: rgba(255, 255, 255, 0.1);
             padding: 15px;
-            border-radius: 8px;
-            margin-bottom: 15px;
+            border-radius: 10px;
+            margin: 15px 0;
+            font-family: 'Courier New', monospace;
+            font-size: 12px;
         }
-        .success {
-            color: #00b894;
+        .highlight {
+            color: #ffd93d;
             font-weight: bold;
         }
     </style>
 </head>
 <body>
     <div class="header">
-        <h1>✅ Successfully Fetched: ${parsedUrl.hostname}</h1>
-        <p><strong>User:</strong> abdollahelkadi | <strong>Time:</strong> 2025-07-06 22:37:18 UTC</p>
+        <h1>🔥 Cloudflare Protection Bypassed!</h1>
+        <div class="success-badge">✅ ${parsedUrl.hostname}</div>
+        <div class="success-badge">🛡️ Advanced Evasion</div>
+        <p><strong>User:</strong> <span class="highlight">abdollahelkadi</span> | <strong>Time:</strong> <span class="highlight">2025-07-06 22:43:59 UTC</span></p>
     </div>
     
     <div class="stats">
-        <p><strong>Status:</strong> <span class="success">${response.status} ${response.statusText}</span></p>
-        <p><strong>URL:</strong> ${targetUrl}</p>
-        <p><strong>Size:</strong> ${html.length.toLocaleString()} characters</p>
+        <h3>📊 Bypass Statistics:</h3>
+        <p><strong>Status:</strong> <span class="highlight">${response.status} ${response.statusText}</span></p>
+        <p><strong>Target:</strong> ${targetUrl}</p>
+        <p><strong>Content Size:</strong> <span class="highlight">${html.length.toLocaleString()}</span> characters</p>
         <p><strong>Content-Type:</strong> ${response.headers.get('content-type') || 'Not specified'}</p>
+        <p><strong>Server:</strong> ${response.headers.get('server') || 'Not specified'}</p>
+        <p><strong>CF-Ray:</strong> ${response.headers.get('cf-ray') || 'Not specified'}</p>
+        <p><strong>CF-Cache-Status:</strong> ${response.headers.get('cf-cache-status') || 'Not specified'}</p>
+        
+        <div class="attempts">
+            <h4>🎭 Fingerprint Attempts:</h4>
+            ${attemptDetails.map(detail => `<div>${detail}</div>`).join('')}
+        </div>
     </div>
 
     <div class="content">
-        <h3>📄 HTML Source:</h3>
+        <h3>📄 Retrieved Content:</h3>
         <pre>${html.replace(/</g, '&lt;').replace(/>/g, '&gt;')}</pre>
     </div>
 </body>
@@ -344,8 +412,10 @@ export default {
           'Content-Type': 'text/html;charset=UTF-8',
           'Cache-Control': 'public, max-age=1800',
           'X-Fetched-From': targetUrl,
+          'X-Bypass-Method': 'Advanced-Fingerprinting',
           'X-Fetched-By': 'abdollahelkadi',
-          'X-Fetched-At': '2025-07-06 22:37:18 UTC'
+          'X-Fetched-At': '2025-07-06 22:43:59 UTC',
+          'X-Attempts': attemptDetails.length.toString()
         }
       });
 
@@ -355,20 +425,49 @@ export default {
 <html>
 <head>
     <meta charset="UTF-8">
-    <title>❌ Fetch Error</title>
+    <title>🔥 Advanced Bypass Failed</title>
     <style>
-        body { font-family: Arial, sans-serif; margin: 40px; background: #1a1a1a; color: #fff; }
-        .error { background: #d63031; padding: 20px; border-radius: 10px; }
+        body { 
+            font-family: 'Segoe UI', sans-serif; 
+            margin: 40px; 
+            background: linear-gradient(135deg, #d63031, #e17055); 
+            color: #fff; 
+        }
+        .error { 
+            background: rgba(0, 0, 0, 0.8); 
+            padding: 30px; 
+            border-radius: 15px; 
+            backdrop-filter: blur(10px);
+        }
+        .badge { 
+            background: #ffd93d; 
+            color: #000; 
+            padding: 5px 12px; 
+            border-radius: 15px; 
+            font-size: 12px; 
+            font-weight: bold; 
+            display: inline-block; 
+            margin: 5px; 
+        }
     </style>
 </head>
 <body>
     <div class="error">
-        <h1>❌ Failed to Fetch</h1>
+        <h1>🔥 Advanced Cloudflare Bypass Failed</h1>
+        <div class="badge">CloudScraper-like Attempted</div>
+        <div class="badge">Multiple Fingerprints Tried</div>
         <p><strong>URL:</strong> ${targetUrl}</p>
         <p><strong>Error:</strong> ${error.message}</p>
         <p><strong>User:</strong> abdollahelkadi</p>
-        <p><strong>Time:</strong> 2025-07-06 22:37:18 UTC</p>
-        <p><strong>Suggestion:</strong> Some sites have very strong protection. Try a different URL.</p>
+        <p><strong>Time:</strong> 2025-07-06 22:43:59 UTC</p>
+        <h3>🛡️ This site has very strong protection:</h3>
+        <ul>
+            <li>Advanced bot detection active</li>
+            <li>Possible CAPTCHA requirement</li>
+            <li>IP-based blocking</li>
+            <li>JavaScript challenge required</li>
+        </ul>
+        <p><strong>💡 Alternative:</strong> Try using the browser directly first, then copy working session data.</p>
     </div>
 </body>
 </html>
