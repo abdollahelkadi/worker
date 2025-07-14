@@ -1,0 +1,1 @@
+This folder contains the built output assets for the worker "wikipedia-fetcher" generated at 2025-07-14T00:22:31.989Z.
