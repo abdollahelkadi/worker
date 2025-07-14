@@ -26,7 +26,7 @@ function getRendererInterface() {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>HTML Renderer - Cloudflare Worker</title>
+    <title>Wikipedia Fetcher - Cloudflare Worker</title>
     <style>
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -99,35 +99,35 @@ function getRendererInterface() {
 </head>
 <body>
     <div class="container">
-        <h1>🌐 HTML Renderer Worker</h1>
+        <h1>📚 Wikipedia Fetcher Worker</h1>
         <p style="text-align: center; font-size: 1.2em; margin-bottom: 30px;">
-            Fetch and proxy any website through Cloudflare's edge network
+            Fetch and display Wikipedia articles through Cloudflare's edge network
         </p>
         
-        <form onsubmit="fetchWebsite(event)">
+        <form onsubmit="fetchWikipedia(event)">
             <div class="input-group">
-                <label for="website-url">Enter Website URL:</label>
+                <label for="wikipedia-query">Enter Wikipedia Article or URL:</label>
                 <input 
-                    type="url" 
-                    id="website-url" 
-                    placeholder="https://example.com" 
+                    type="text" 
+                    id="wikipedia-query" 
+                    placeholder="e.g., 'Artificial Intelligence' or 'https://en.wikipedia.org/wiki/Machine_Learning'" 
                     required
                 >
             </div>
-            <button type="submit" class="btn">🚀 Fetch & Render Website</button>
+            <button type="submit" class="btn">📖 Fetch Wikipedia Article</button>
         </form>
         
         <div class="feature">
-            ✅ <strong>Global CDN:</strong> Fetch websites through Cloudflare's edge network
+            ✅ <strong>Wikipedia Optimized:</strong> Enhanced formatting for Wikipedia articles
         </div>
         <div class="feature">
-            ✅ <strong>CORS Bypass:</strong> Access websites that block cross-origin requests
+            ✅ <strong>Global CDN:</strong> Fetch articles through Cloudflare's edge network
+        </div>
+        <div class="feature">
+            ✅ <strong>CORS Bypass:</strong> Access Wikipedia content without restrictions
         </div>
         <div class="feature">
             ✅ <strong>Fast & Reliable:</strong> Powered by Cloudflare Workers
-        </div>
-        <div class="feature">
-            ✅ <strong>No Installation:</strong> Works directly in your browser
         </div>
         
         <div class="timestamp">
@@ -136,11 +136,22 @@ function getRendererInterface() {
     </div>
 
     <script>
-        function fetchWebsite(event) {
+        function fetchWikipedia(event) {
             event.preventDefault();
-            const url = document.getElementById('website-url').value;
+            const query = document.getElementById('wikipedia-query').value.trim();
             
-            if (url) {
+            if (query) {
+                let url;
+                
+                // Check if it's already a Wikipedia URL
+                if (query.includes('wikipedia.org')) {
+                    url = query;
+                } else {
+                    // Convert search term to Wikipedia URL
+                    const encodedQuery = encodeURIComponent(query.replace(/\\s+/g, '_'));
+                    url = 'https://en.wikipedia.org/wiki/' + encodedQuery;
+                }
+                
                 // Redirect to the fetch endpoint
                 window.location.href = '/fetch/' + encodeURIComponent(url);
             }
@@ -158,6 +169,9 @@ async function fetchAndRenderWebsite(targetUrl) {
             targetUrl = 'https://' + targetUrl;
         }
         
+        // Check if it's a Wikipedia URL for special handling
+        const isWikipedia = targetUrl.includes('wikipedia.org');
+        
         // Fetch the website
         const response = await fetch(targetUrl, {
             headers: {
@@ -174,7 +188,14 @@ async function fetchAndRenderWebsite(targetUrl) {
         // Fix relative URLs to absolute URLs
         html = fixRelativeUrls(html, targetUrl);
         
+        // Apply Wikipedia-specific enhancements if it's a Wikipedia page
+        if (isWikipedia) {
+            html = enhanceWikipediaContent(html, targetUrl);
+        }
+        
         // Add a header to show it's proxied
+        const headerType = isWikipedia ? 'Wikipedia Article' : 'Website';
+        const headerIcon = isWikipedia ? '📚' : '🌐';
         const proxyHeader = `
         <div style="
             position: fixed; 
@@ -190,8 +211,8 @@ async function fetchAndRenderWebsite(targetUrl) {
             font-size: 14px;
             box-shadow: 0 2px 10px rgba(0,0,0,0.1);
         ">
-            🌐 Proxied through Cloudflare Worker | Original: <strong>${targetUrl}</strong> | 
-            <a href="/" style="color: #FFD700; text-decoration: none;">← Back to Renderer</a>
+            ${headerIcon} ${headerType} proxied through Cloudflare Worker | Original: <strong>${targetUrl}</strong> | 
+            <a href="/" style="color: #FFD700; text-decoration: none;">← Back to Wikipedia Fetcher</a>
         </div>
         <div style="height: 50px;"></div>
         `;
@@ -204,7 +225,8 @@ async function fetchAndRenderWebsite(targetUrl) {
                 'content-type': 'text/html;charset=UTF-8',
                 'cache-control': 'no-cache',
                 'x-proxied-by': 'cloudflare-worker',
-                'x-original-url': targetUrl
+                'x-original-url': targetUrl,
+                'x-content-type': isWikipedia ? 'wikipedia-article' : 'website'
             }
         });
         
@@ -214,6 +236,52 @@ async function fetchAndRenderWebsite(targetUrl) {
             status: 500
         });
     }
+}
+
+function enhanceWikipediaContent(html, baseUrl) {
+    // Add Wikipedia-specific styling improvements
+    const wikipediaStyles = `
+    <style>
+        /* Wikipedia-specific enhancements */
+        .mw-body {
+            max-width: 900px !important;
+            margin: 0 auto !important;
+            padding: 20px !important;
+        }
+        .mw-body-content {
+            font-family: Georgia, 'Times New Roman', serif !important;
+            line-height: 1.6 !important;
+        }
+        .mw-parser-output p {
+            text-align: justify !important;
+            margin-bottom: 1em !important;
+        }
+        .infobox {
+            border: 1px solid #a2a9b1 !important;
+            border-spacing: 3px !important;
+            background-color: #f8f9fa !important;
+            color: black !important;
+            margin: 0.5em 0 0.5em 1em !important;
+            padding: 0.2em !important;
+            float: right !important;
+            clear: right !important;
+            font-size: 88% !important;
+            line-height: 1.5em !important;
+        }
+        .navbox {
+            border: 1px solid #a2a9b1 !important;
+            background-color: #f8f9fa !important;
+        }
+        /* Hide some clutter for better reading experience */
+        .mw-editsection { display: none !important; }
+        .citation-needed { color: #0645ad !important; }
+    </style>
+    `;
+    
+    // Insert styles in the head
+    html = html.replace(/<\/head>/i, wikipediaStyles + '</head>');
+    
+    return html;
 }
 
 function fixRelativeUrls(html, baseUrl) {
@@ -234,6 +302,20 @@ function fixRelativeUrls(html, baseUrl) {
 }
 
 function getErrorPage(url, error) {
+    const isWikipedia = url.includes('wikipedia.org');
+    const title = isWikipedia ? 'Failed to Fetch Wikipedia Article' : 'Failed to Fetch Website';
+    const suggestions = isWikipedia ? [
+        'Article might not exist',
+        'Check spelling of the article name',
+        'Try a different language Wikipedia (e.g., es.wikipedia.org)',
+        'Wikipedia server might be temporarily unavailable'
+    ] : [
+        'Website blocking requests',
+        'CORS restrictions',
+        'Server is down',
+        'Invalid URL'
+    ];
+    
     return `
 <!DOCTYPE html>
 <html>
@@ -262,18 +344,15 @@ function getErrorPage(url, error) {
 </head>
 <body>
     <div class="error-container">
-        <h1>❌ Failed to Fetch Website</h1>
+        <h1>❌ ${title}</h1>
         <p><strong>URL:</strong> ${url}</p>
         <p><strong>Error:</strong> ${error}</p>
         <p>This could be due to:</p>
         <ul style="text-align: left;">
-            <li>Website blocking requests</li>
-            <li>CORS restrictions</li>
-            <li>Server is down</li>
-            <li>Invalid URL</li>
+            ${suggestions.map(s => `<li>${s}</li>`).join('')}
         </ul>
         <a href="/" style="color: #FFD700; text-decoration: none; font-weight: bold;">
-            ← Try Another Website
+            ← Try Another ${isWikipedia ? 'Article' : 'Website'}
         </a>
     </div>
 </body>
